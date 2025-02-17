@@ -1,7 +1,25 @@
 <?php
-	ob_start();
-	include(dirname(__FILE__).'/config/config.php');
-	$app = new Application();
-	$app->setDefault('user.index.index');
-	$app->run();
+
+function getNetworkTime() {
+    $url = 'http://worldtimeapi.org/api/ip';
+
+    $response = file_get_contents($url);
+
+    if ($response) {
+        $data = json_decode($response, true);
+        if ($data && isset($data['datetime'])) {
+            return $data['datetime'];
+        }
+    }
+
+    return null;
+}
+
+$networkTime = getNetworkTime();
+if ($networkTime) {
+    echo "Network Time: " . $networkTime;
+} else {
+    echo "Failed to retrieve network time.";
+}
+
 ?>
